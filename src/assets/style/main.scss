@@ -1,0 +1,53 @@
+@import './variables.scss';
+
+html {
+  font-size: 16px;
+  font-family: $font-secondary;
+  color: #fff;
+}
+
+body {
+  background-color: #ffffff !important;
+  margin: 0 !important;
+  color: #fff;
+  padding: 0 !important;
+}
+
+h1,
+h2,
+h3 {
+  color: $highlight;
+}
+h1,
+h2 {
+  font-family: $font-primary;
+}
+h3 {
+  font-family: $font-highlight;
+}
+p {
+  color: #fff;
+}
+
+.flex-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+div[class*='effect-card-'] {
+  animation: swishAway 0.2s 1;
+}
+
+@keyframes swishAway {
+  from {
+    top: 0;
+    right: 0;
+  }
+  to {
+    height: 0;
+    width: 0;
+    top: -999px;
+    right: -999px;
+  }
+}

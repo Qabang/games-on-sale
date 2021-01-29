@@ -1,0 +1,27 @@
+// Font
+@import url('https://fonts.googleapis.com/css2?family=Goldman&family=Lato&family=Permanent+Marker&display=swap');
+$font-primary: 'Goldman', cursive;
+$font-secondary: 'Lato', sans-serif;
+$font-highlight: 'Permanent Marker', cursive;
+
+// Colors
+$darkblue: rgb(6, 6, 37);
+$lightblue: rgb(121, 121, 211);
+$white: rgb(228, 250, 253);
+$gray: rgb(66, 66, 66);
+
+$primary-dark: #04151f;
+$secondary-dark: #432534;
+$primary: #183a37;
+$secondary: #c44900;
+$highlight: #efd6ac;
+
+$shadow: 4px 4px 10px rgba(rgb(0, 0, 0), 0.6);
+$sale-gradient: radial-gradient(rgb(228, 89, 89), rgb(156, 52, 52));
+
+// Other
+$wrapper-width: 1200px;
+
+// Sass imports (The variables need to be set prior to importing)
+@import '~bootstrap';
+@import '~bootstrap-vue';
