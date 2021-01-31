@@ -1,7 +1,7 @@
 <template>
-  <div class="List-view">
+  <section class="List-view">
     <List />
-  </div>
+  </section>
 </template>
 
 <script>

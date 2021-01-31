@@ -2,11 +2,14 @@
   <div id="app">
     <header>
       <nav id="nav">
-        <div id="logo"></div>
+        <div id="logo" @click="onClick"></div>
         <ul>
           <li><router-link to="/">Deals</router-link></li>
           <li>
-            <router-link to="/about">Stores</router-link>
+            <router-link to="/about">About</router-link>
+          </li>
+          <li>
+            <router-link to="/stores">Stores</router-link>
           </li>
           <li>
             <router-link to="/list">
@@ -25,6 +28,33 @@
     <div id="back-to-top" @click="scrollToTop()">
       <b-icon icon="arrow-up" font-scale="2"></b-icon>
     </div>
+    <footer>
+      <section class="wrapper">
+        <h2>Get in touch</h2>
+        <ul>
+          <li>
+            <a
+              href="https://www.linkedin.com/in/sandra-lindstr%C3%B6m-b11903153/"
+              title="Linkedin"
+              ><b-icon icon="linkedin" font-scale="2"></b-icon
+              ><span>Linkedin</span></a
+            >
+          </li>
+          <li>
+            <a href="mailto:sandra.lindstrom@iths.se" title="Email"
+              ><b-icon icon="envelope-fill" font-scale="2"></b-icon>
+              <span>Email</span></a
+            >
+          </li>
+          <li>
+            <a href="https://github.com/Qabang" title="Github"
+              ><b-icon icon="github" font-scale="2"></b-icon
+              ><span>Github</span></a
+            >
+          </li>
+        </ul>
+      </section>
+    </footer>
   </div>
 </template>
 <script>
@@ -49,6 +79,11 @@ export default {
         left: 0,
         behavior: "smooth",
       });
+    },
+    onClick() {
+      if (this.$route.path != "/") {
+        this.$router.push("/");
+      }
     },
   },
 };
@@ -108,6 +143,7 @@ header {
   background-image: url(./assets/logo.svg);
   height: 140px;
   width: 73px;
+  cursor: pointer;
 }
 
 #back-to-top {
@@ -129,6 +165,44 @@ header {
   &:hover {
     background: darken($secondary, 10%);
     cursor: pointer;
+  }
+}
+
+footer {
+  background: darken($primary, 15%);
+  color: $secondary;
+  text-align: left;
+  padding: 10px;
+
+  .wrapper {
+    max-width: $wrapper-width;
+    padding: 20px;
+    margin: auto;
+
+    ul {
+      display: flex;
+      padding-left: 0;
+      margin-left: -35px;
+
+      li {
+        margin: 10px 30px;
+        list-style-type: none;
+        padding: 15px;
+
+        span {
+          position: absolute;
+          left: -99999999px;
+        }
+
+        .b-icon {
+          fill: $secondary;
+
+          &:hover {
+            fill: $primary;
+          }
+        }
+      }
+    }
   }
 }
 </style>
