@@ -86,9 +86,11 @@ export default {
     background: $primary;
     min-width: 115px;
 
-    &:hover:not(.not-active) {
-      background: $secondary;
-      cursor: pointer;
+    @media (min-width: $breakpoint-tablet) {
+      &:hover:not(.not-active) {
+        background: $secondary;
+        cursor: pointer;
+      }
     }
 
     &.not-active {
@@ -133,8 +135,10 @@ export default {
     &.active {
       fill: yellow;
     }
-    &:hover {
-      fill: rgba(yellow, 0.5);
+    @media (min-width: $breakpoint-tablet) {
+      &:hover {
+        fill: rgba(yellow, 0.5);
+      }
     }
     .animate {
       animation-name: rotationOnce;
@@ -177,13 +181,15 @@ export default {
       position: absolute;
     }
 
-    &:hover {
-      cursor: pointer;
-      background: $secondary;
-
-      label,
-      input {
+    @media (min-width: $breakpoint-tablet) {
+      &:hover {
         cursor: pointer;
+        background: $secondary;
+
+        label,
+        input {
+          cursor: pointer;
+        }
       }
     }
   }

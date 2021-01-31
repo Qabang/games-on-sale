@@ -102,8 +102,8 @@ export default {
     toggleMenu() {
       let nav = document.getElementById("desktop-nav");
 
-      if (nav.style.right != "-300px" && nav.style.right != "") {
-        nav.style.right = "-300px";
+      if (nav.style.right != "-500px" && nav.style.right != "") {
+        nav.style.right = "-500px";
       } else {
         nav.style.right = 0;
       }
@@ -132,7 +132,6 @@ header {
 }
 #nav {
   padding: 20px 30px;
-  padding-top: 60px;
   max-width: $wrapper-width;
   margin: auto;
 
@@ -142,12 +141,12 @@ header {
     background: $highlight;
     position: absolute;
     z-index: 10;
-    right: -300px;
+    right: -500px;
     top: 0;
     margin: 0;
     padding: 30px 20px;
     justify-content: flex-end;
-    transition: 1s;
+    transition: 0.5s;
 
     @media (min-width: $breakpoint-tablet) {
       display: flex;
@@ -241,10 +240,11 @@ header {
   .b-icon {
     fill: $highlight;
   }
-
-  &:hover {
-    background: darken($secondary, 10%);
-    cursor: pointer;
+  @media (min-width: $breakpoint-tablet) {
+    &:hover {
+      background: darken($secondary, 10%);
+      cursor: pointer;
+    }
   }
 }
 
@@ -276,9 +276,10 @@ footer {
 
         .b-icon {
           fill: $secondary;
-
-          &:hover {
-            fill: $primary;
+          @media (min-width: $breakpoint-tablet) {
+            &:hover {
+              fill: $primary;
+            }
           }
         }
       }

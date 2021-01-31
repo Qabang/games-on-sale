@@ -47,7 +47,7 @@
       ></b-icon>
     </div>
     <ul id="total" v-if="$store.state.shoppingList.length > 0">
-      <li>Savings: {{ total.normal - total.sale }}$</li>
+      <li>Savings: {{ parseFloat(total.normal - total.sale).toFixed(2) }}$</li>
       <li>Total: {{ total.sale }}$</li>
     </ul>
   </section>
@@ -129,16 +129,27 @@ export default {
     transform: rotate(1.5deg);
     text-align: right;
     list-style-type: none;
+    font-size: 1.5rem;
 
     li:first-child {
-      font-size: 2rem;
+      font-size: 1rem;
       font-family: $font-secondary;
       text-transform: uppercase;
       font-weight: 900;
+      @media (min-width: $breakpoint-tablet) {
+        font-size: 2rem;
+      }
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: 3rem;
     }
   }
 
   .remove-item {
+    position: absolute;
+    top: 0;
+    right: 0;
     justify-self: center;
     margin: auto;
     margin-right: 20px;
@@ -147,17 +158,23 @@ export default {
       fill: $secondary;
       cursor: pointer;
     }
+    @media (min-width: $breakpoint-tablet) {
+      position: unset;
+    }
+  }
+
+  .flex-wrapper {
+    position: relative;
   }
 }
 
 .deal {
-  display: flex;
+  display: block;
   color: $primary-dark;
   width: calc(100% - 70px);
   box-sizing: border-box;
   margin: 20px auto;
   padding: 20px;
-  display: flex;
   flex-direction: row;
   justify-content: center;
   border-radius: 2px;
@@ -168,12 +185,20 @@ export default {
     color: $black;
     text-transform: uppercase;
     font-weight: 700;
-    max-width: 45%;
+    max-width: 100%;
+
+    @media (min-width: $breakpoint-tablet) {
+      max-width: 45%;
+    }
   }
 
   &:hover {
     cursor: pointer;
     background: rgba($secondary, 0.8);
+  }
+
+  @media (min-width: $breakpoint-tablet) {
+    display: flex;
   }
 }
 .game-poster {
@@ -217,7 +242,7 @@ export default {
   .sale-percent {
     display: block;
     width: 100px;
-    margin: 10px auto;
+    margin: 10px;
     background-image: $sale-gradient;
     padding: 10px;
     border-radius: 2px;
@@ -227,6 +252,12 @@ export default {
 
   .sale-price {
     font-weight: 600;
+  }
+
+  @media (min-width: $breakpoint-tablet) {
+    .sale-percent {
+      margin: 10px auto;
+    }
   }
 }
 </style>
