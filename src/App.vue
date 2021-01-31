@@ -3,7 +3,12 @@
     <header>
       <nav id="nav">
         <div id="logo" @click="onClick"></div>
-        <ul>
+        <div id="mobile-nav">
+          <b-icon icon="dash" font-scale="6" @click="toggleMenu"></b-icon>
+          <b-icon icon="dash" font-scale="6" @click="toggleMenu"></b-icon>
+          <b-icon icon="dash" font-scale="6" @click="toggleMenu"></b-icon>
+        </div>
+        <ul id="desktop-nav">
           <li><router-link to="/">Deals</router-link></li>
           <li>
             <router-link to="/about">About</router-link>
@@ -19,6 +24,12 @@
               </span>
             </router-link>
           </li>
+          <b-icon
+            id="close-mobile-nav"
+            icon="x"
+            font-scale="4"
+            @click="toggleMenu"
+          ></b-icon>
         </ul>
       </nav>
     </header>
@@ -62,9 +73,12 @@ export default {
   created() {
     window.addEventListener("scroll", this.toggleUpArrow);
 
+    this.$nextTick(() => {
+      window.addEventListener("resize", this.onResize);
+    });
+
     this.$store.dispatch("getStores");
   },
-  props: {},
   methods: {
     toggleUpArrow() {
       if (window.innerHeight < window.scrollY) {
@@ -83,6 +97,15 @@ export default {
     onClick() {
       if (this.$route.path != "/") {
         this.$router.push("/");
+      }
+    },
+    toggleMenu() {
+      let nav = document.getElementById("desktop-nav");
+
+      if (nav.style.right != "-300px" && nav.style.right != "") {
+        nav.style.right = "-300px";
+      } else {
+        nav.style.right = 0;
       }
     },
   },
@@ -115,28 +138,85 @@ header {
 
   ul {
     display: flex;
+    flex-direction: column;
+    background: $highlight;
+    position: absolute;
+    z-index: 10;
+    right: -300px;
+    top: 0;
     margin: 0;
-    padding: 0;
+    padding: 30px 20px;
     justify-content: flex-end;
+    transition: 1s;
+
+    @media (min-width: $breakpoint-tablet) {
+      display: flex;
+      background: unset;
+      position: unset;
+      right: unset;
+      top: unset;
+      padding: 0;
+      flex-direction: row;
+      transition: unset;
+    }
 
     li {
-      margin: 0 20px;
+      margin: 20px;
       margin-top: auto;
       list-style-type: none;
+      text-align: left;
+
+      @media (min-width: $breakpoint-tablet) {
+        margin: -28px 20px 0;
+      }
+    }
+
+    a {
+      color: $primary-dark;
+      font-weight: bold;
+      letter-spacing: 2px;
+      font-size: 1.2rem;
+      padding: 20px;
+
+      &.router-link-exact-active {
+        color: $secondary-dark;
+        text-decoration: underline;
+      }
+      @media (min-width: $breakpoint-tablet) {
+        padding: 0;
+        color: $highlight;
+        &.router-link-exact-active {
+          color: $secondary;
+        }
+      }
     }
   }
-}
 
-#nav a {
-  font-weight: bold;
-  color: $highlight;
-  letter-spacing: 2px;
-  font-size: 1.2rem;
-}
+  #mobile-nav {
+    display: flex;
+    flex-direction: column;
+    margin-top: -48px;
 
-#nav a.router-link-exact-active {
-  color: $secondary;
-  text-decoration: underline;
+    .b-icon {
+      justify-self: flex-end;
+      fill: $highlight;
+      margin: -40px 0 -40px auto;
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      display: none;
+    }
+  }
+
+  #close-mobile-nav {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    @media (min-width: $breakpoint-tablet) {
+      display: none;
+    }
+  }
 }
 
 #logo {
