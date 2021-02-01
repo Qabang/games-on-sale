@@ -2,6 +2,13 @@
   <div id="app">
     <header>
       <nav id="nav">
+        <div id="offline-msg" v-if="!online" @click="toggleOfflineMsg">
+          <b-icon icon="x" font-scale="2" @click="toggleMenu"></b-icon>
+          <p>
+            You are currently offline. <br />
+            The contenet on the site are now served from cached data.
+          </p>
+        </div>
         <div id="logo" @click="onClick"></div>
         <div id="mobile-nav">
           <b-icon icon="dash" font-scale="6" @click="toggleMenu"></b-icon>
@@ -71,15 +78,56 @@
 <script>
 export default {
   created() {
+    addEventListener("offline", () => {
+      this.online = false;
+    });
+
+    addEventListener("online", () => {
+      this.online = true;
+    });
+
     window.addEventListener("scroll", this.toggleUpArrow);
 
+    // Check the window.innerwidth to change the navigation look.
     this.$nextTick(() => {
       window.addEventListener("resize", this.onResize);
     });
 
     this.$store.dispatch("getStores");
   },
+  mounted() {
+    this.getOnlineStatus().then((isOnline) => {
+      this.online = isOnline ? true : false;
+    });
+  },
+  data() {
+    return {
+      online: false,
+    };
+  },
+  watch: {
+    online() {
+      this.getOnlineStatus().then((isOnline) => {
+        this.online = isOnline ? true : false;
+      });
+    },
+  },
   methods: {
+    toggleOfflineMsg() {
+      let msg = document.getElementById("offline-msg");
+      msg.classList.contains("open")
+        ? msg.classList.remove("open")
+        : msg.classList.add("open");
+    },
+    getOnlineStatus() {
+      if (navigator.onLine) {
+        return fetch(location.origin, { method: "HEAD" })
+          .then(() => true)
+          .catch(() => false);
+      }
+
+      return new Promise((resolve) => resolve(false));
+    },
     toggleUpArrow() {
       if (window.innerHeight < window.scrollY) {
         document.querySelector("#back-to-top").style.bottom = "0";
@@ -283,6 +331,54 @@ footer {
           }
         }
       }
+    }
+  }
+}
+
+#offline-msg {
+  background-image: radial-gradient(red, darkred);
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  color: white;
+  padding: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  position: absolute;
+  transform: translateX(-50%);
+  margin-right: 50%;
+
+  &:after {
+    content: "Offline";
+    color: $secondary;
+    font-size: 12px;
+    margin-top: 15px;
+    margin-left: -18px;
+    display: block;
+  }
+
+  p,
+  .b-icon {
+    display: none;
+  }
+
+  &.open {
+    background: $primary;
+    width: 80vw;
+    border-color: $secondary;
+    height: auto;
+
+    p,
+    .b-icon {
+      display: block;
+    }
+
+    .b-icon {
+      margin-left: auto;
+    }
+
+    &:after {
+      display: none;
     }
   }
 }

@@ -9,7 +9,7 @@
       </p>
     </template>
 
-    <template v-if="loading">
+    <template v-if="loading && error === ''">
       <b-icon
         icon="three-dots"
         id="loading"
