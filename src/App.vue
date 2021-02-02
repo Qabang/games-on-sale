@@ -46,7 +46,7 @@
     <div id="back-to-top" @click="scrollToTop()">
       <b-icon icon="arrow-up" font-scale="2"></b-icon>
     </div>
-    <div id="install-prompt-wrapper" v-if="hidePrompt">
+    <div id="install-prompt-wrapper" v-if="showPrompt">
       <div id="install-prompt-logo-wrapper">
         <div id="install-prompt-logo"></div>
       </div>
@@ -124,12 +124,17 @@ export default {
     this.getOnlineStatus().then((isOnline) => {
       this.online = isOnline ? true : false;
     });
+
+    // If user dismissed the install banner we hide it.
+    if (localStorage.showPrompt === "false") {
+      this.showPrompt = false;
+    }
   },
   data() {
     return {
       online: false,
       deferredPrompt: null,
-      hidePrompt: localStorage.hidePrompt,
+      showPrompt: true,
     };
   },
   watch: {
@@ -142,6 +147,7 @@ export default {
   methods: {
     hideMyInstallPromotion() {
       document.getElementById("install-prompt-wrapper").style.display = "none";
+      localStorage.setItem("showPrompt", false);
     },
     installApp() {
       // Hide the app provided install promotion
@@ -154,7 +160,7 @@ export default {
           console.log("User accepted the install prompt");
         } else {
           console.log("User dismissed the install prompt");
-          localStorage.hidePrompt = true;
+          localStorage.setItem("showPrompt", false);
         }
       });
     },
