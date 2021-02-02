@@ -144,9 +144,6 @@ export default {
       document.getElementById("install-prompt-wrapper").style.display = "none";
     },
     installApp() {
-      if (this.deferredPrompt === null) {
-        return;
-      }
       // Hide the app provided install promotion
       this.hideMyInstallPromotion();
       // Show the install prompt

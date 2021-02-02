@@ -14,6 +14,13 @@ module.exports = {
           },
           urlPattern: 'https://www.cheapshark.com/api/1.0/deals',
         },
+        {
+          handler: 'NetworkFirst',
+          options: {
+            networkTimeoutSeconds: 5,
+          },
+          urlPattern: 'https://www.cheapshark.com/api/1.0/stores',
+        },
       ],
     },
     iconPaths: {
