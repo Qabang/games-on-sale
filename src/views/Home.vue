@@ -2,7 +2,7 @@
   <section class="home">
     <template v-if="this.$route.params.storeID">
       <h2>Deals from {{ $route.params.name }}</h2>
-      <router-link to="/about" id="backArrow">
+      <router-link to="/stores" id="backArrow">
         <b-icon icon="arrow-left-short" font-scale="1.5"></b-icon>
         Back to stores
       </router-link>
