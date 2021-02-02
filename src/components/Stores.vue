@@ -1,7 +1,7 @@
 <template>
   <section id="stores">
     <h1>The stores</h1>
-    <p>Down below we list all the stores that we get the games deals from.</p>
+    <p>Down below we list all the stores that we get game offers from.</p>
     <p>
       If you want to add a store to your favourites just click the star on the
       store card

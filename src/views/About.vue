@@ -46,7 +46,7 @@ export default {
   }
 
   .textbox {
-    width: 500px;
+    max-width: 500px;
     margin: 25px auto 30px;
     color: $highlight;
     line-height: 1.5;

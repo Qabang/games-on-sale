@@ -46,6 +46,21 @@
     <div id="back-to-top" @click="scrollToTop()">
       <b-icon icon="arrow-up" font-scale="2"></b-icon>
     </div>
+    <div id="install-prompt-wrapper" v-if="hidePrompt">
+      <div id="install-prompt-logo-wrapper">
+        <div id="install-prompt-logo"></div>
+      </div>
+      <div id="install-prompt">
+        Install <span>Games on sale</span> on your homescreen
+      </div>
+      <button @click="installApp($event)">Install</button>
+      <b-icon
+        icon="x"
+        font-scale="2"
+        @click="hideMyInstallPromotion"
+        id="install-prompt-close"
+      ></b-icon>
+    </div>
     <footer>
       <section class="wrapper">
         <h2>Get in touch</h2>
@@ -78,14 +93,24 @@
 <script>
 export default {
   created() {
-    addEventListener("offline", () => {
+    window.addEventListener("offline", () => {
       this.online = false;
     });
 
-    addEventListener("online", () => {
+    window.addEventListener("online", () => {
       this.online = true;
     });
 
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      this.deferredPrompt = e;
+    });
+    window.addEventListener("appinstalled", () => {
+      this.deferredPrompt = null;
+    });
+
+    // Check window scrollheight to toggle up arrow.
     window.addEventListener("scroll", this.toggleUpArrow);
 
     // Check the window.innerwidth to change the navigation look.
@@ -103,6 +128,8 @@ export default {
   data() {
     return {
       online: false,
+      deferredPrompt: null,
+      hidePrompt: localStorage.hidePrompt,
     };
   },
   watch: {
@@ -113,13 +140,34 @@ export default {
     },
   },
   methods: {
+    hideMyInstallPromotion() {
+      document.getElementById("install-prompt-wrapper").style.display = "none";
+    },
+    installApp() {
+      if (this.deferredPrompt === null) {
+        return;
+      }
+      // Hide the app provided install promotion
+      this.hideMyInstallPromotion();
+      // Show the install prompt
+      this.deferredPrompt.prompt();
+      // Wait for the user to respond to the prompt
+      this.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the install prompt");
+        } else {
+          console.log("User dismissed the install prompt");
+          localStorage.hidePrompt = true;
+        }
+      });
+    },
     toggleOfflineMsg() {
       let msg = document.getElementById("offline-msg");
       msg.classList.contains("open")
         ? msg.classList.remove("open")
         : msg.classList.add("open");
     },
-    getOnlineStatus() {
+    async getOnlineStatus() {
       if (navigator.onLine) {
         return fetch(location.origin, { method: "HEAD" })
           .then(() => true)
@@ -164,6 +212,7 @@ export default {
 @import "./assets/style/variables.scss";
 
 #app {
+  position: relative;
   text-align: center;
   background-color: $primary-dark;
   min-height: 100vh;
@@ -173,10 +222,12 @@ header {
   background-image: linear-gradient($primary-dark, $secondary-dark);
   margin-bottom: 30px;
   box-shadow: $shadow;
+  max-height: 180px;
 }
 #wrapper {
   max-width: $wrapper-width;
   margin: auto;
+  min-height: calc(100vh - 180px - 205px);
 }
 #nav {
   padding: 20px 30px;
@@ -301,6 +352,7 @@ footer {
   color: $secondary;
   text-align: left;
   padding: 10px;
+  max-height: 205px;
 
   .wrapper {
     max-width: $wrapper-width;
@@ -379,6 +431,95 @@ footer {
 
     &:after {
       display: none;
+    }
+  }
+}
+
+#install-prompt-wrapper {
+  display: flex;
+  bottom: 0;
+  left: 0;
+  margin-left: 50%;
+  position: fixed;
+  transform: translateX(-50%);
+  background: $secondary-dark;
+  border: $secondary solid 2px;
+  color: $highlight;
+  min-height: 70px;
+  border-radius: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+
+  @media (min-width: $breakpoint-tablet) {
+    flex-wrap: nowrap;
+    width: unset;
+  }
+
+  & > div {
+    margin: 20px 7.5px;
+  }
+  #install-prompt {
+    flex-basis: 50%;
+
+    span {
+      font-weight: 900;
+    }
+    @media (min-width: $breakpoint-tablet) {
+      flex-basis: unset;
+    }
+  }
+  button {
+    margin: auto 7.5px;
+    background-color: lighten($primary, 10%);
+    padding: 5px 10px;
+    color: #ffffff;
+    border-radius: 10px;
+    flex-basis: 100%;
+
+    &:hover {
+      background-color: lighten($primary, 15%);
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      flex-basis: unset;
+    }
+  }
+
+  #install-prompt-logo-wrapper {
+    border-right: 1px solid lighten($secondary-dark, 10%);
+    height: 40px;
+    margin: auto 7.5px;
+    margin-left: 20px;
+    flex-basis: 18%;
+
+    div {
+      height: 40px;
+      width: 40px;
+      border-radius: 20px;
+      background-color: $primary-dark;
+      background-image: url(./assets/logo.svg);
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin: 0 5px 0 0;
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      flex-basis: unset;
+    }
+  }
+  #install-prompt-close {
+    margin: 16px 20px 20px;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    cursor: pointer;
+    &:hover {
+      fill: $secondary;
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      position: unset;
     }
   }
 }

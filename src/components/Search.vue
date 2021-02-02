@@ -6,13 +6,15 @@
       @keyup.enter="getSearchQuery()"
       placeholder="search..."
     />
-    <div class="search-button" tabindex="0">
+    <div class="search-button" @click="getSearchQuery()" tabindex="0">
       <b-icon icon="search" id="search-icon"></b-icon>
     </div>
-    <p id="search-result-msg" v-if="visible">
-      We found {{ Object.keys(deals).length }} deals!
-      <b-icon icon="x" font-scale="1.7" @click="onClick(null)"></b-icon>
-    </p>
+    <div id="msg-wrapper" v-if="visible">
+      <div id="search-result-msg">
+        We found {{ Object.keys(deals).length }} deals!
+        <b-icon icon="x" font-scale="1.7" @click="onClick(null)"></b-icon>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -22,7 +24,7 @@ export default {
   props: {
     searchQuery: { type: String },
     deals: { type: [Array, Object] },
-    show: Boolean,
+    show: { type: Boolean },
   },
   data() {
     return {
@@ -52,20 +54,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "../assets/style/variables.scss";
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 section {
   display: flex;
   flex-wrap: wrap;
@@ -107,21 +96,26 @@ input {
   fill: $primary;
 }
 
-#search-result-msg {
-  display: block;
-  margin: 20px 39%;
-  padding: 20px;
-  border-radius: 5px;
-  border: 2px solid $highlight;
-  color: $highlight;
+#msg-wrapper {
   flex-basis: 100%;
-  background: $secondary-dark;
-  box-shadow: $shadow;
-  line-height: 1.5;
+  #search-result-msg {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 5px;
+    border: 2px solid $highlight;
+    color: $highlight;
+    background: $secondary-dark;
+    box-shadow: $shadow;
+    line-height: 1.5;
+    white-space: nowrap;
+    min-width: 70px;
+    width: max-content;
 
-  .b-icon {
-    float: right;
-    margin-top: -4px;
+    .b-icon {
+      float: right;
+      margin-top: -4px;
+    }
   }
 }
 </style>

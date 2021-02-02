@@ -95,7 +95,7 @@ export default {
 
 .shopping-list {
   background-color: rgb(255, 248, 185);
-  //Lined paper effect start.
+  //Lined paper effect start. Source: https://codepen.io/montanaflynn/pen/cbuvy
   background-image: linear-gradient(
       0deg,
       transparent 5em,

@@ -77,7 +77,10 @@
               :key="store.storeID"
             >
               <div>Get it at</div>
-              <img :src="'https://www.cheapshark.com' + store.images.banner" />
+              <img
+                :src="'https://www.cheapshark.com' + store.images.banner"
+                :alt="'Banner for ' + store.storeName"
+              />
               <b-icon icon="box-arrow-right" font-scale="1"></b-icon>
             </div>
           </template>
@@ -225,15 +228,33 @@ export default {
           .then((response) => {
             let gameIdString = "";
             response.data.forEach((element) => {
+              console.log(response.data.length);
               gameIdString += element.gameID + ",";
             });
 
+            gameIdString = gameIdString.slice(0, -1);
+            let search_url = "https://www.cheapshark.com/api/1.0/games?ids=";
+            let alter_response = false;
+
+            // The api url differ if there is only one game.
+            if (response.data.length === 1) {
+              search_url = "https://www.cheapshark.com/api/1.0/games?id=";
+              // We need to change the response.data object when there is only
+              // one item otherwise it won't render correctly.
+              alter_response = true;
+            }
+
             this.axios
-              .get(
-                "https://www.cheapshark.com/api/1.0/games?ids=" + gameIdString
-              )
+              .get(search_url + gameIdString)
               .then((response) => {
-                this.$emit("deals", response.data);
+                let result = response.data;
+
+                // We need to rework the object to be able to display it corrctly.
+                if (alter_response) {
+                  result = { gameIdString: response.data };
+                }
+
+                this.$emit("deals", result);
                 this.loading = false;
               })
               .catch((error) => (this.error = error));
